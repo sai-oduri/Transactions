@@ -1,10 +1,10 @@
 const express = require("express");
 const zod = require("zod");
 const jwt = require("jsonwebtoken");
-const { User } = require("../db");
+const { User, Account } = require("../db");
 const router = express.Router();
 const { authMiddleware } = require("../middleware");
-require("dotenv").config;
+require("dotenv").config();
 
 // signup
 
@@ -29,7 +29,7 @@ router.post("/signup", async (req, res) => {
 
     if (existingUser) {
         return res.status(411).json({
-            message: "Email already taken/Incorrect inputs"
+            message: "Email already taken / Incorrect inputs"
         })
     }
 
@@ -49,7 +49,7 @@ router.post("/signup", async (req, res) => {
 
     const token = jwt.sign({
         userId
-    }, JWT_SECRET);
+    }, process.env.JWT_SECRET);
 
     res.json({
         message: "User created successfully",
@@ -81,7 +81,7 @@ router.post("/signin", async (req, res) => {
     if (user) {
         const token = jwt.sign({
             userId: user._id
-        }, JWT_SECRET);
+        }, process.env.JWT_SECRET);
 
         res.json({
             token: token
@@ -112,11 +112,11 @@ router.put("/", authMiddleware, async (req, res) => {
     }
 
     await User.updateOne({
-        id: req.userId
+        _id: req.userId
     }, req.body)
 
     res.json({
-        message: "Updates Successfully"
+        message: "Updates Successfully",
     })
 })
 

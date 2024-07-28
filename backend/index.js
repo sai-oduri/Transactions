@@ -1,5 +1,6 @@
 const express = require("express");
 const cors = require("cors");
+require("dotenv").config();
 
 const app = express();
 
@@ -10,7 +11,11 @@ const mainRouter = require("./routes/index");
 
 app.use("/api/v1", mainRouter);
 
-app.listen(3000);
+const port = process.env.PORT || 3001;
+
+app.listen(port, () => {
+    console.log(`Running on port ${port}`)
+});
 
 
 //  /api/v1/user/signup
